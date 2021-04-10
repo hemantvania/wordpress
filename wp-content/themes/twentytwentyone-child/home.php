@@ -32,9 +32,9 @@ get_header();
                         <div class="col-md-7" data-aos="fade-down">
                             <div class="chef-img-banner">
 							<?php if($banner){ ?>
-								<img src="<?php echo $banner;?>" alt="">
+								<img src="<?php echo $banner;?>" alt="Kasba India Restaurant">
 							<?php } else { ?>
-                                <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/chef-img.png" alt="">
+                                <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/chef-img.png" alt="Kasba India Restaurant">
 							<?php } ?>	
                             </div>
                         </div>
@@ -43,22 +43,17 @@ get_header();
             </div>
         </div>
     </div>
-
-    <!-- ===== BANNER END ===== -->
-
-    <!-- ===== ABOUT US START ===== -->
-
+    <?php $about = get_field('about_block');?>
     <div class="section">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-sm-12col-xs-12">
                     <div class="about-img" data-aos="fade-right">
-                        <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/about-us-image.png" alt="">
+                        <img src="<?php echo get_the_post_thumbnail_url($about->ID,'full');?>" alt="<?php echo $about->post_title;?>">
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                    <div class="about-cont" data-aos="fade-left">
-					<?php $about = get_field('about_block');?>
+                    <div class="about-cont" data-aos="fade-left">					
                         <span class="sup-title"><?php echo $about->post_title;?></span>
                         <h2 class="main-title"><?php echo get_field('page_extra_title',$about->ID );?></h2>
                         <?php echo get_field('short_content',$about->ID );?>
@@ -68,20 +63,18 @@ get_header();
             </div>
         </div>
     </div>
-
-    <!-- ===== ABOUT US END ===== -->
-
-    <!-- ===== NEW RECIPES START ===== -->
 	<?php 
+    /** Only new recipes */
 	$argsRecipe = [
 		'numberposts'	=>3,
 		'orderby'		=> 'order',
         'order'         => 'ASC',
+        'meta_key'      => 'is_new_recipe',
+        'meta_value'    => true,
 		'post_type'		=> 'recipes'
 	];
 	$recipes = get_posts( $argsRecipe );
-	if(count($recipes) > 0 ){
-	?>
+	if(count($recipes) > 0 ){ ?>
     <div class="section fading-bg mt-0 pb-5 mb-0">
         <div class="container">
             <div class="row">
@@ -92,23 +85,20 @@ get_header();
                     </div>
                 </div>
 				<?php foreach($recipes as $recipe ) { ?>
-                <div class="col-md-4 col-sm-12 col-xs-12" data-aos="flip-left">
-                    <div class="food-box">
-                        <img src="<?php echo get_the_post_thumbnail_url($recipe->ID,'full');?>" alt="">
-                        <h5><?php echo $recipe->post_title;?></h5>
-                        <span><?php echo get_field('recipes_price', $recipe->ID);?></span>
+                    <div class="col-md-4 col-sm-12 col-xs-12" data-aos="flip-left">
+                        <div class="food-box">
+                            <img src="<?php echo get_the_post_thumbnail_url($recipe->ID,'full');?>" alt="">
+                            <h5><?php echo $recipe->post_title;?></h5>
+                            <span>$<?php echo get_field('recipes_price', $recipe->ID);?></span>
+                        </div>
                     </div>
-                </div>
 				<?php } ?>
                 <a class="main-btn-red" data-aos="zoom-in" href="<?php echo get_post_type_archive_link( 'recipes' ); ?>">See More Recipes</a>
             </div>
         </div>
     </div>
 	<?php } ?>
-    <!-- ===== NEW RECIPES END ===== -->
-
-    <!-- ===== SPECIAL OFFER START ===== -->
-	<?php 
+   <?php 
 	$offers = get_field('special_offers');
 	if($offers['offers_enabled']){
 	?>
@@ -129,7 +119,7 @@ get_header();
 								<img src="<?php echo $offers['offer_image_'.$a];?>" alt="">								
 							<?php } else { ?>
 							<a href="<?php echo $offers['offer_link_'.$a] ? $offers['offer_link_'.$a] : 'javascript:void(0)';?>">
-								<img src="<?php echo $offers['offer_image_'.$a];?>" alt="">								
+								<img src="<?php echo $offers['offer_image_'.$a];?>" alt="Offer">								
 							</a>
 							<?php } ?>
 						</div>
@@ -140,10 +130,7 @@ get_header();
         </div>
     </div>
 	<?php } ?>
-    <!-- ===== SPECIAL OFFER END ===== -->
-
-    <!-- ===== SERVICES START ===== -->
-	<?php 
+  	<?php 
 	$argsServices = [
 		'numberposts'	=>3,
 		'orderby'		=> 'order',
@@ -174,14 +161,12 @@ get_header();
         </div>
     </div>
 	<?php } ?>
-    <!-- ===== SERVICES END ===== -->
-
-    <!-- ===== GALLERY START ===== -->
-	<?php 
+  	<?php 
+      /** All recipes */
 	$argsRecipe = [
-		'numberposts'	=>6,
+		'numberposts'	=> 6,
 		'orderby'		=> 'date',
-        'order'         => 'DESC',
+        'order'         => 'DESC',       
 		'post_type'		=> 'recipes'
 	];
 	$recipes = get_posts( $argsRecipe );
@@ -210,10 +195,17 @@ get_header();
         </div>
     </div>
 	<?php } ?>
-    <!-- ===== GALLERY END ===== -->
-
-    <!-- ===== EVENT START ===== -->
-
+    <?php
+        $argsEvents = [
+            'numberposts'	=> 8,
+            'meta_key'      => 'event_date',
+            'orderby'		=> 'meta_value',
+            'order'         => 'ASC',       
+            'post_type'		=> 'events'
+        ];
+        $events = get_posts( $argsEvents );
+        if(count($events) > 0 ){
+    ?>
     <div class="section mb-0">
         <div class="container">
             <div class="row">
@@ -227,70 +219,17 @@ get_header();
                     <div class="events-part">
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
+                            <?php foreach($events as $event ) { ?>
                                 <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
+                                    <a href="<?php echo get_permalink($event->ID);?>">
                                         <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/decade-nights.png" alt="">
-                                            <h4 class="event-title">Decade Nights</h4>
+                                            <img src="<?php echo get_the_post_thumbnail_url($event->ID,'full');?>" alt="">
+                                            <h4 class="event-title"><?php echo $event->post_title;?></h4>
+                                            <!--span><?php echo get_field('event_date', $event->ID);?></span-->
                                         </div>
                                     </a>
                                 </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/event.png" alt="">
-                                            <h4 class="event-title">Charity Event</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/candle-dinner.png" alt="">
-                                            <h4 class="event-title">Candle Light Dinner</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/live-music.png" alt="">
-                                            <h4 class="event-title">Live Music</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/decade-nights.png" alt="">
-                                            <h4 class="event-title">Decade Nights</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/event.png" alt="">
-                                            <h4 class="event-title">Charity Event</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/candle-dinner.png" alt="">
-                                            <h4 class="event-title">Candle Light Dinner</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-aos="fade-left">
-                                    <a href="#">
-                                        <div class="event-box">
-                                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/event-ico/live-music.png" alt="">
-                                            <h4 class="event-title">Live Music</h4>
-                                        </div>
-                                    </a>
-                                </div>
+                            <?php } ?>                                
                             </div>
                         </div>
                         <div class="swiper-button-next"></div>
@@ -300,10 +239,18 @@ get_header();
             </div>
         </div>
     </div>
-
-    <!-- ===== EVENT END ===== -->
-
-    <!-- ===== LATEST NEWS START ===== -->
+     <?php } ?>       
+    <?php
+        $argsNews = [
+            'numberposts'	=> 3,
+            'orderby'		=> 'date',
+            'order'         => 'DESC',       
+            'post_type'		=> 'post',
+            'category_name' => 'news'
+        ];
+        $latestNews = get_posts( $argsNews );        
+        if(count($latestNews) > 0 ){
+    ?>
 
     <div class="section mb-0">
         <div class="container">
@@ -314,56 +261,22 @@ get_header();
                         <h2 class="main-title">Our Delicious News</h2>
                     </div>
                 </div>
+                <?php foreach($latestNews as $news) { ?>
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="news-box" data-aos="fade-up-right">
-                        <a href="#">
-                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/news-img/dummy-one.png" alt="">
-                            <h4>
-                                Kentucky Butter Cake
-                            </h4>
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit...
-                            </p>
-                            <a href="#" class="news-read-more">Read More <span class="next-arrow"></span></a>
+                        <a href="<?php echo get_permalink($news->ID);?>">
+                            <img src="<?php echo get_the_post_thumbnail_url($news->ID,'full');?>" alt="<?php echo $news->post_title;?>">
+                            <h4><?php echo $news->post_title;?></h4>
+                            <p><?php echo $news->post_excerpt;?></p>
+                            <a href="<?php echo get_permalink($news->ID);?>" class="news-read-more">Read More <span class="next-arrow"></span></a>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="news-box" data-aos="fade-up-right">
-                        <a href="#">
-                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/news-img/dummy-two.png" alt="">
-                            <h4>
-                                Kentucky Butter Cake
-                            </h4>
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit...
-                            </p>
-                            <a href="#" class="news-read-more">Read More <span class="next-arrow"></span></a>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="news-box" data-aos="fade-up-right">
-                        <a href="#">
-                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/news-img/dummy-three.png" alt="">
-                            <h4>
-                                Kentucky Butter Cake
-                            </h4>
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit...
-                            </p>
-                            <a href="#" class="news-read-more">Read More <span class="next-arrow"></span></a>
-                        </a>
-                    </div>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>
-
-    <!-- ===== LATEST NEWS END ===== -->
-
-    <!-- ===== TESTIMONIAL START ===== -->
-
+<?php } ?>
     <div class="section">
         <div class="container">
             <div class="row">
@@ -373,10 +286,11 @@ get_header();
                         <h2 class="main-title">That’s what our <br>
                             Client Says</h2>
                     </div>
+                    <?php echo do_shortcode('[testimonial_view id="1"]');?>
                     <div class="google-reviews">
                         <div class="owl-carousel testimonial-carousel">
                             <!--   Start Testimonials -->
-
+                            
                             <!--   Testimonial 1 -->
                             <div class="single-testimonial">
                                 <div class="testimonials-wrapper">
@@ -443,7 +357,11 @@ get_header();
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12" data-aos="fade-up-left">
                     <div class="about-img">
-                        <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/review-side-img.png" alt="">
+                        <?php if(get_field('bottom_image')) { ?>
+                            <img src="<?php echo get_field('bottom_image');?>" alt=""> 
+                        <?php } else { ?>
+                            <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/review-side-img.png" alt="">
+                        <?php } ?>
                     </div>
                 </div>
             </div>

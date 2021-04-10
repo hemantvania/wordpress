@@ -23,12 +23,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <form action="" class="mail-sent">
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control">
-                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </form>
+                        <?php echo do_shortcode('[newsletter_form form="1"]');?>
                     </div>
                 </div>
             </div>
@@ -40,110 +35,46 @@
     <div class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 col-sm-12 col-xs-12">
-                    <div class="kasba-info">
-                        <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/logo-white.png" alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of typ.</p>
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <?php if ( is_active_sidebar( 'footer_area_one' ) ) : ?>
+                    <?php dynamic_sidebar( 'footer_area_one' ); ?>
+                <?php endif; ?>
+                </div>
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    <div class="web-links">
+                        <?php if ( is_active_sidebar( 'footer_area_two' ) ) : ?>
+                            <?php dynamic_sidebar( 'footer_area_two' ); ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-6 col-xs-12">
                     <div class="web-links">
-                        <h4>Important Links</h4>
-                        <ul>
-                            <li>
-                                <a href="#">
-                                Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                About Kasba
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                Menus
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                HomeCatering
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                Group
-                                </a>
-                            </li>
-                        </ul>
+                        <?php if ( is_active_sidebar( 'footer_area_three' ) ) : ?>
+                            <?php dynamic_sidebar( 'footer_area_three' ); ?>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <div class="col-md-2 col-sm-6 col-xs-12">
-                    <div class="web-links">
-                        <h4>Popular Dishes</h4>
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    Fast Food
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Dessart Food
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Dinner
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Lunch
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Indian Food
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <?php
+                    $argsNews = [
+                        'numberposts'	=> 6,
+                        'orderby'		=> 'date',
+                        'order'         => 'DESC',
+                        'post_type'		=> 'post',
+                        'category_name' => 'news'
+                    ];
+                    $latestNews = get_posts( $argsNews );
+                ?>
                 <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="web-links">
                         <h4>Latest Posts</h4>
                         <ul class="img-box">
+                            <?php foreach($latestNews as $news) { ?>
                             <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-1.png" alt="">
+                                <a href="<?php the_permalink($news->ID);?>">
+                                    <img src="<?php echo get_the_post_thumbnail_url($news->ID,'footer-thumb');?>" alt="<?php echo $news->post_title;?>">
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-2.png" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-3.png" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-4.png" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-5.png" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/footer-img/post-6.png" alt="">
-                                </a>
-                            </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>
@@ -155,17 +86,17 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12">
                     <div class="copy-right">
-                        <p>@2021 Kasba All Rights Reserved</p>
+                           <P>@<?php echo date('Y');?> Kasba All Rights Reserved</P>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                     <div class="t-c-page">
                         <ul>
                             <li>
-                                <a href="#">Ptivacy Policy</a>
+                                <a href="<?php echo site_url('/privacy-policy/');?>">Ptivacy Policy</a>
                             </li>
                             <li>
-                                <a href="#">Terms & Conditions</a>
+                                <a href="<?php echo site_url('/terms-conditions/');?>">Terms & Conditions</a>
                             </li>
                         </ul>
                     </div>
@@ -175,7 +106,7 @@
     </div>
 
     <div class="booking-btn" data-aos="zoom-in-up">
-        <a href="#">
+        <a href="<?php echo site_url('/book-a-table/');?>">
             <img src="<?php echo get_stylesheet_directory_uri();?>/assets/image/book-table-btn.png" alt="">
         </a>
     </div>    

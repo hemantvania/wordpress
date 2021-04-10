@@ -12,3 +12,5 @@
  Text Domain:  twentytwentyonechild
 */
 .menu ul li.reserve-btn {margin: 30px 0 0 0;}
+.events-part .event-box span { font-size: 14px; color:#000;}
+.footer .menu {float: unset;}

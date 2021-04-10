@@ -34,12 +34,69 @@ function custom_scripts_and_css() {
 	wp_enqueue_script('bootstrap-min', get_stylesheet_directory_uri() . '/assets/js/bootstrap.min.js', array('jquery'), '', true);
 	wp_enqueue_script('aos-js', get_stylesheet_directory_uri() . '/assets/js/aos.js', array('jquery'), '', true);
 }
+
+add_image_size( 'footer-thumb', 75, 75 );
+
+add_action( 'init', 'register_kasna_menus' );
 function register_kasna_menus() {
   register_nav_menus(
     array(
       'mobile-menu' => __( 'Mobile Menu' ),
-      'extra-menu' => __( 'Extra Menu' )
+      'important-links' => __( 'Important Links' ),
+      'populalr-dishes' => __( 'Popular Dishes' )
      )
    );
- }
- add_action( 'init', 'register_kasna_menus' );
+ } 
+
+ add_action( 'widgets_init', 'kasba_widget_areas' );
+ function kasba_widget_areas() {
+
+  register_sidebar( array(
+    'name'          => 'Footer area one',
+    'id'            => 'footer_area_one',
+    'description'   => 'First area for About the site',
+    'before_widget' => '<section class="footer-area footer-area-one">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4>',
+    'after_title'   => '</h4>',
+  ));
+
+  register_sidebar( array(
+    'name'          => 'Footer area two',
+    'id'            => 'footer_area_two',
+    'description'   => 'Second area for Important Links',
+    'before_widget' => '<section class="footer-area footer-area-two">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4>',
+    'after_title'   => '</h4>',
+  ));
+
+  register_sidebar( array(
+    'name'          => 'Footer area three',
+    'id'            => 'footer_area_three',
+    'description'   => 'For Popular Dishes',
+    'before_widget' => '<section class="footer-area footer-area-three">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4>',
+    'after_title'   => '</h4>',
+  ));
+
+  register_sidebar( array(
+    'name'          => 'Footer area four',
+    'id'            => 'footer_area_four',
+    'description'   => 'For Latest post',
+    'before_widget' => '<section class="footer-area footer-area-three">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4>',
+    'after_title'   => '</h4>',
+  ));
+
+}
+
+add_filter("newsletter_user_confirmed", "redirect_newsletter_user_confirmed", 10, 1);
+
+function redirect_newsletter_user_confirmed($user) {
+
+    wp_redirect( site_url('/newsletter-success/') );
+    exit;
+}
