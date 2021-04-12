@@ -67,7 +67,7 @@ get_header();
     /** Only new recipes */
 	$argsRecipe = [
 		'numberposts'	=>3,
-		'orderby'		=> 'order',
+		'orderby'		=> 'menu_order',
         'order'         => 'ASC',
         'meta_key'      => 'is_new_recipe',
         'meta_value'    => true,
