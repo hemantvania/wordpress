@@ -59,25 +59,37 @@
                         'numberposts'	=> 6,
                         'orderby'		=> 'date',
                         'order'         => 'DESC',
-                        'post_type'		=> 'post',
-                        'category_name' => 'news'
+                        'post_type'		=> array('post','recipes'),
+                       // 'category_name' => 'news'
                     ];
-                    $latestNews = get_posts( $argsNews );
+                    
+                    $latestNews = new WP_Query( $argsNews );
+
+                   
+
+                if ( $latestNews->have_posts() ) :
                 ?>
                 <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="web-links">
                         <h4>Latest Posts</h4>
                         <ul class="img-box">
-                            <?php foreach($latestNews as $news) { ?>
+                        <?php while ( $latestNews->have_posts() ) : $latestNews->the_post();
+                            if(has_post_thumbnail()) {
+                            ?>
                             <li>
-                                <a href="<?php the_permalink($news->ID);?>">
-                                    <img src="<?php echo get_the_post_thumbnail_url($news->ID,'footer-thumb');?>" alt="<?php echo $news->post_title;?>">
+                                <a href="<?php the_permalink();?>">
+                                    <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(),'footer-thumb');?>" alt="<?php echo $news->post_title;?>">                                    
                                 </a>
                             </li>
                             <?php } ?>
+                            <?php endwhile;  ?>
                         </ul>
                     </div>
                 </div>
+                <?php wp_reset_postdata(); ?>
+                <?php
+            else : echo "NO DSTA";
+            endif; ?>
             </div>
         </div>
     </div>
