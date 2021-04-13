@@ -100,3 +100,7 @@ function redirect_newsletter_user_confirmed($user) {
     wp_redirect( site_url('/newsletter-success/') );
     exit;
 }
+
+function getPlaceHolderUrl(){
+  return get_stylesheet_directory_uri().'/assets/image/placeholder.png';
+}
